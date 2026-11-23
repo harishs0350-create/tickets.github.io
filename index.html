@@ -1,0 +1,1529 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>MatineeGo | Smart Movie Decisions</title>
+
+<style>
+
+/* =========================
+   GLOBAL DESIGN
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    scroll-behavior: smooth;
+}
+
+:root {
+    --purple: #a855f7;
+    --blue: #06b6d4;
+    --background: #080812;
+    --card: #151528;
+    --border: #303052;
+    --text: #ffffff;
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+}
+
+a {
+    color: inherit;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 6%;
+    background: rgba(12, 12, 29, 0.97);
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-size: 27px;
+    font-weight: bold;
+    color: #c084fc;
+}
+
+.logo span {
+    color: #38bdf8;
+}
+
+nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+}
+
+nav a {
+    text-decoration: none;
+    color: white;
+    font-size: 13px;
+    transition: .3s;
+}
+
+nav a:hover {
+    color: var(--blue);
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn {
+    background: linear-gradient(90deg, #9333ea, #2563eb);
+    color: white;
+    border: none;
+    padding: 13px 23px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 15px;
+    transition: .3s;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 20px #9333ea88;
+}
+
+/* =========================
+   HERO / LOGO
+========================= */
+
+.hero {
+    min-height: 540px;
+    padding: 45px 5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background:
+        radial-gradient(ellipse at center, #25104c, #080812 75%);
+    overflow: hidden;
+}
+
+.hero-logo {
+    display: block;
+    width: 100%;
+    max-width: 1200px;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    filter:
+        drop-shadow(0 0 15px #9333ea99)
+        drop-shadow(0 0 35px #06b6d477);
+    transition: .4s;
+}
+
+.hero-logo:hover {
+    transform: scale(1.02);
+}
+
+.hero p {
+    color: #d1d5db;
+    max-width: 700px;
+    line-height: 1.8;
+    margin-top: 22px;
+}
+
+#logoError {
+    display: none;
+    color: #ff8bba;
+    padding: 20px;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+section {
+    padding: 55px 8%;
+}
+
+.section-title {
+    font-size: 30px;
+    margin-bottom: 25px;
+}
+
+.section-title span {
+    color: #a78bfa;
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.grid {
+    display: grid;
+    grid-template-columns:
+        repeat(auto-fit, minmax(220px, 1fr));
+    gap: 22px;
+}
+
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 20px;
+    border-radius: 12px;
+    transition: .3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--purple);
+    box-shadow: 0 0 18px #9333ea22;
+}
+
+.card h3 {
+    color: #c4b5fd;
+    margin: 12px 0;
+}
+
+.card p {
+    color: #c5c5d8;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.poster {
+    height: 155px;
+    border-radius: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 55px;
+    background: linear-gradient(
+        135deg, #312e81, #581c87, #0f172a
+    );
+}
+
+.price {
+    color: #67e8f9;
+    font-size: 23px;
+    margin: 13px 0;
+}
+
+.small {
+    font-size: 12px !important;
+    color: #9999b5 !important;
+}
+
+/* =========================
+   PANELS
+========================= */
+
+.panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 25px;
+    margin-top: 20px;
+}
+
+.panel h3 {
+    color: #c4b5fd;
+    margin-bottom: 12px;
+}
+
+.panel p {
+    color: #c5c5d8;
+    line-height: 1.7;
+}
+
+.result {
+    color: #67e8f9;
+    margin-top: 15px;
+    line-height: 1.9;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+select {
+    padding: 13px;
+    background: #0d0d1c;
+    color: white;
+    border: 1px solid #555577;
+    border-radius: 7px;
+    margin: 12px 5px 12px 0;
+    width: 100%;
+    max-width: 420px;
+}
+
+select:focus {
+    outline: 2px solid var(--purple);
+}
+
+label {
+    display: block;
+    color: #d8d8ed;
+    margin-top: 18px;
+}
+
+/* =========================
+   MOOD RECOMMENDATION
+========================= */
+
+.mood-box {
+    background:
+        linear-gradient(135deg, #1d1240, #10182d);
+    border: 1px solid #6541a8;
+    padding: 25px;
+    border-radius: 15px;
+}
+
+.recommendation-card {
+    background: #101020;
+    border: 1px solid var(--blue);
+    border-radius: 12px;
+    padding: 22px;
+    margin-top: 20px;
+    display: none;
+}
+
+.recommendation-card h2 {
+    color: #67e8f9;
+    margin: 12px 0;
+}
+
+/* =========================
+   SEAT SELECTION
+========================= */
+
+.screen {
+    max-width: 500px;
+    margin: 25px auto;
+    padding: 12px;
+    text-align: center;
+    border-bottom: 4px solid #38bdf8;
+    color: #38bdf8;
+    letter-spacing: 4px;
+    box-shadow: 0 8px 15px -12px #38bdf8;
+}
+
+.seats {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 10px;
+    max-width: 500px;
+    margin: 25px auto;
+}
+
+.seat {
+    background: #343450;
+    border: none;
+    color: white;
+    padding: 12px 3px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.seat.selected {
+    background: #9333ea;
+}
+
+.seat.recommended {
+    outline: 2px solid #38bdf8;
+}
+
+.seat.occupied {
+    background: #555;
+    opacity: .5;
+    cursor: not-allowed;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    background: #101020;
+    padding: 40px;
+    text-align: center;
+    color: #aaaac4;
+    margin-top: 40px;
+}
+
+footer p {
+    margin-top: 10px;
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media(max-width: 750px) {
+
+    header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    nav {
+        justify-content: center;
+        gap: 12px;
+    }
+
+    nav a {
+        font-size: 12px;
+    }
+
+    .hero {
+        min-height: 320px;
+        padding: 30px 5%;
+    }
+
+    section {
+        padding: 40px 6%;
+    }
+
+    .section-title {
+        font-size: 25px;
+    }
+
+    .seats {
+        gap: 5px;
+    }
+
+    .seat {
+        font-size: 12px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- =========================
+     HEADER
+========================= -->
+
+<header>
+
+    <div class="logo">
+        MATINEE<span>GO</span>
+    </div>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#theatres">Theatres</a>
+        <a href="#movies">Movies</a>
+        <a href="#upcoming">Upcoming</a>
+        <a href="#mood">Mood AI</a>
+        <a href="#seats">AI Seats</a>
+        <a href="#snacks">Snacks</a>
+        <a href="#reviews">Reviews</a>
+    </nav>
+
+</header>
+
+
+<!-- =========================
+     HOMEPAGE
+========================= -->
+
+<div class="hero" id="home">
+
+    <img
+        src="./matineego-logo.png"
+        alt="MatineeGo Official Logo"
+        class="hero-logo"
+        onerror="
+            this.style.display='none';
+            document.getElementById('logoError').style.display='block';
+        "
+    >
+
+    <div id="logoError">
+        Logo not found. Place matineego-logo.png
+        in the same folder as index.html.
+    </div>
+
+    <p>
+        Discover movies, find your perfect cinema seat,
+        compare snack prices and get movie recommendations
+        based on your mood and interests.
+    </p>
+
+    <a href="#mood">
+        <button class="btn">FIND MY MOVIE</button>
+    </a>
+
+</div>
+
+
+<!-- =========================
+     THEATRES
+========================= -->
+
+<section id="theatres">
+
+    <h2 class="section-title">
+        Coimbatore <span>Theatres</span>
+    </h2>
+
+    <div class="grid">
+
+        <div class="card">
+
+            <h3>KG Cinemas</h3>
+
+            <p>📍 Race Course, Coimbatore</p>
+
+            <div class="price">₹150 onwards*</div>
+
+            <p class="small">Illustrative demo price</p>
+
+            <button class="btn"
+                onclick="selectTheatre('kg')">
+                SELECT THEATRE
+            </button>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>Cinépolis</h3>
+
+            <p>📍 Fun Republic Mall, Peelamedu</p>
+
+            <div class="price">₹190 onwards*</div>
+
+            <p class="small">Illustrative demo price</p>
+
+            <button class="btn"
+                onclick="selectTheatre('cinepolis')">
+                SELECT THEATRE
+            </button>
+
+        </div>
+
+
+        <div class="card">
+
+            <h3>INOX</h3>
+
+            <p>📍 Prozone Mall, Sathy Road</p>
+
+            <div class="price">₹180 onwards*</div>
+
+            <p class="small">Illustrative demo price</p>
+
+            <button class="btn"
+                onclick="selectTheatre('inox')">
+                SELECT THEATRE
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <h3>Selected Theatre</h3>
+
+        <select id="theatreSelect"
+            onchange="updateTheatre()">
+
+            <option value="kg">KG Cinemas</option>
+            <option value="cinepolis">Cinépolis</option>
+            <option value="inox">INOX</option>
+
+        </select>
+
+        <div id="theatreDetails" class="result"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     MOVIES
+========================= -->
+
+<section id="movies">
+
+    <h2 class="section-title">
+        Discover <span>Movies</span>
+    </h2>
+
+    <div class="grid" id="movieCards"></div>
+
+    <div class="panel">
+
+        <h3>Choose Your Movie</h3>
+
+        <select id="movieSelect"
+            onchange="updateMovie()">
+        </select>
+
+        <p id="movieInfo" class="result"></p>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     UPCOMING MOVIES
+========================= -->
+
+<section id="upcoming">
+
+    <h2 class="section-title">
+        Upcoming <span>Movies</span>
+    </h2>
+
+    <p style="color:#aaa;margin-bottom:25px">
+        Explore upcoming movie releases and discover
+        what each movie is about.
+    </p>
+
+    <div class="grid" id="upcomingMovies"></div>
+
+    <p class="small" style="margin-top:18px">
+        Release dates and movie descriptions are sample
+        project data. Verify official announcements before publishing.
+    </p>
+
+</section>
+
+
+<!-- =========================
+     MOOD BASED AI FINDER
+========================= -->
+
+<section id="mood">
+
+    <h2 class="section-title">
+        Find Movies Based on Your <span>Mood</span>
+    </h2>
+
+    <div class="mood-box">
+
+        <h3>🎬 Let's find your perfect movie!</h3>
+
+        <p>
+            Tell MatineeGo what you enjoy and how you feel.
+            We will suggest a movie for your cinema experience.
+        </p>
+
+        <label for="interest">
+            1. What type of movies do you enjoy?
+        </label>
+
+        <select id="interest">
+
+            <option value="Action">🔥 Action and Adventure</option>
+            <option value="Romance">❤️ Romance and Love</option>
+            <option value="Comedy">😂 Comedy and Fun</option>
+            <option value="Sci-Fi">🚀 Science Fiction</option>
+            <option value="Thriller">🕵️ Mystery and Thriller</option>
+            <option value="Drama">🎭 Emotional Drama</option>
+            <option value="Fantasy">🧙 Fantasy and Adventure</option>
+
+        </select>
+
+
+        <label for="mood">
+            2. How are you feeling today?
+        </label>
+
+        <select id="mood">
+
+            <option value="Happy">😊 Happy</option>
+            <option value="Sad">😔 Sad</option>
+            <option value="Bored">🥱 Bored</option>
+            <option value="Excited">🤩 Excited</option>
+            <option value="Relaxed">😌 Relaxed</option>
+            <option value="Adventurous">🔥 Adventurous</option>
+            <option value="Curious">🧠 Curious</option>
+
+        </select>
+
+
+        <label for="duration">
+            3. What movie length do you prefer?
+        </label>
+
+        <select id="duration">
+
+            <option value="Any">Any duration</option>
+            <option value="Short">Short movie</option>
+            <option value="Medium">Medium duration</option>
+            <option value="Long">Long movie</option>
+
+        </select>
+
+
+        <button class="btn"
+            onclick="suggestByMood()">
+            ✨ SUGGEST MY MOVIE
+        </button>
+
+
+        <div class="recommendation-card"
+            id="moodResult">
+
+            <p>YOUR MATINEEGO RECOMMENDATION</p>
+
+            <h2 id="suggestedMovie"></h2>
+
+            <p id="suggestedReason"></p>
+
+            <button class="btn"
+                onclick="bookRecommendedMovie()">
+                SELECT THIS MOVIE
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     AI SEAT SELECTION
+========================= -->
+
+<section id="seats">
+
+    <h2 class="section-title">
+        AI Smart <span>Seat Selection</span>
+    </h2>
+
+    <div class="panel">
+
+        <p>
+            Select available seats or get a recommendation
+            for the central viewing area.
+        </p>
+
+        <div class="screen">
+            CINEMA SCREEN
+        </div>
+
+        <div class="seats" id="seatGrid"></div>
+
+        <p class="small">
+            Purple = Selected |
+            Blue outline = Recommended |
+            Grey = Unavailable
+        </p>
+
+        <button class="btn"
+            onclick="recommendSeats()">
+            FIND BEST SEATS
+        </button>
+
+        <div id="seatResult" class="result"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     SNACK COMPARISON
+========================= -->
+
+<section id="snacks">
+
+    <h2 class="section-title">
+        Smart <span>Snack Comparison</span>
+    </h2>
+
+    <div class="panel">
+
+        <p>
+            Compare popcorn, beverages, nachos and combo prices
+            at your selected cinema.
+        </p>
+
+        <div class="grid"
+            id="snackList"
+            style="margin-top:20px">
+        </div>
+
+        <p class="small">
+            All snack prices are illustrative demonstration data.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     MOVIE REVIEWS
+========================= -->
+
+<section id="reviews">
+
+    <h2 class="section-title">
+        Movie <span>Review Analysis</span>
+    </h2>
+
+    <div class="panel">
+
+        <p>
+            Explore sample movie audience sentiment summaries.
+        </p>
+
+        <div id="reviewInfo" class="result"></div>
+
+        <p class="small">
+            Review summaries and percentages are sample data,
+            not actual verified audience reviews.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     BOOKING
+========================= -->
+
+<section id="booking">
+
+    <h2 class="section-title">
+        Book Your <span>Tickets</span>
+    </h2>
+
+    <div class="panel">
+
+        <h3>Booking Summary</h3>
+
+        <div id="bookingSummary" class="result">
+            Choose a movie and seats to continue.
+        </div>
+
+        <button class="btn"
+            onclick="bookTicket()">
+            CONFIRM DEMO BOOKING
+        </button>
+
+        <div id="bookingResult" class="result"></div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    <div class="logo">
+        MATINEE<span>GO</span>
+    </div>
+
+    <p>
+        Smart Movie Decisions. Better Cinema Experience.
+    </p>
+
+    <p class="small">
+        © 2026 MatineeGo | Student Startup Project
+    </p>
+
+</footer>
+
+
+<!-- =========================
+     JAVASCRIPT
+========================= -->
+
+<script>
+
+/* THEATRE DATA */
+
+const theatres = {
+
+    kg: {
+        name: "KG Cinemas",
+        area: "Race Course, Coimbatore",
+        ticket: 150,
+
+        snacks: [
+            ["Popcorn", 120],
+            ["Soft Drink", 90],
+            ["Nachos", 150],
+            ["Popcorn + Drink Combo", 190]
+        ]
+    },
+
+    cinepolis: {
+        name: "Cinépolis Fun Republic Mall",
+        area: "Peelamedu, Coimbatore",
+        ticket: 190,
+
+        snacks: [
+            ["Popcorn", 160],
+            ["Soft Drink", 110],
+            ["Nachos", 180],
+            ["Popcorn + Drink Combo", 240]
+        ]
+    },
+
+    inox: {
+        name: "INOX Prozone Mall",
+        area: "Sathy Road, Coimbatore",
+        ticket: 180,
+
+        snacks: [
+            ["Popcorn", 150],
+            ["Soft Drink", 100],
+            ["Nachos", 170],
+            ["Popcorn + Drink Combo", 220]
+        ]
+    }
+
+};
+
+
+/* CURRENT MOVIES */
+
+const movies = [
+
+    {
+        name: "Ramayana",
+        genre: "Fantasy",
+        emoji: "🏹",
+        status: "Demo movie listing",
+        review:
+            "Sample sentiment: 75% positive, 15% mixed and 10% negative."
+    },
+
+    {
+        name: "Jailer 2",
+        genre: "Action",
+        emoji: "🔥",
+        status: "Demo movie listing",
+        review:
+            "Sample sentiment: 80% positive, 12% mixed and 8% negative."
+    },
+
+    {
+        name: "Godzilla Minus Zero",
+        genre: "Sci-Fi",
+        emoji: "🦖",
+        status: "Demo movie listing",
+        review:
+            "Sample sentiment: 78% positive, 14% mixed and 8% negative."
+    },
+
+    {
+        name: "Scene",
+        genre: "Drama",
+        emoji: "🎭",
+        status: "Demo movie listing",
+        review:
+            "Sample sentiment: 68% positive, 20% mixed and 12% negative."
+    },
+
+    {
+        name: "O.M Operation Mole",
+        genre: "Thriller",
+        emoji: "🕵️",
+        status: "Demo movie listing",
+        review:
+            "Sample sentiment: 70% positive, 18% mixed and 12% negative."
+    },
+
+    {
+        name: "Avengers: Doomsday",
+        genre: "Sci-Fi",
+        emoji: "🦸",
+        status: "Upcoming movie demo entry",
+        review:
+            "No verified audience review summary available."
+    }
+
+];
+
+
+/* UPCOMING MOVIES */
+
+const upcomingMovies = [
+
+    {
+        name: "Avengers: Doomsday",
+        date: "18 December 2026",
+        genre: "Sci-Fi / Action",
+        emoji: "🦸",
+        description:
+            "Earth's heroes face a major new threat. The complete official story has not been revealed."
+    },
+
+    {
+        name: "Dune: Part Three",
+        date: "18 December 2026",
+        genre: "Sci-Fi / Adventure",
+        emoji: "🏜️",
+        description:
+            "The next chapter in the science-fiction saga of Paul Atreides and the world of Arrakis."
+    },
+
+    {
+        name: "Jumanji: Open World",
+        date: "25 December 2026",
+        genre: "Adventure / Comedy",
+        emoji: "🌴",
+        description:
+            "A new adventure in the Jumanji universe. Detailed plot information is not yet available."
+    },
+
+    {
+        name: "Inji Vellam",
+        date: "29 January 2027",
+        genre: "Romance / Drama",
+        emoji: "❤️",
+        description:
+            "A romantic drama entry for the project. Verify the title, cast and release date before publication."
+    }
+
+];
+
+
+/* GLOBAL VARIABLES */
+
+let selectedMovie = movies[0].name;
+
+let selectedSeats = [];
+
+let recommendedMovie = "";
+
+const bestSeats = [18, 19, 22, 23];
+
+
+/* SELECT THEATRE */
+
+function selectTheatre(id) {
+
+    document.getElementById("theatreSelect").value = id;
+
+    updateTheatre();
+
+    document.getElementById("theatreDetails")
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
+
+}
+
+
+/* UPDATE THEATRE */
+
+function updateTheatre() {
+
+    const id =
+        document.getElementById("theatreSelect").value;
+
+    const theatre = theatres[id];
+
+    document.getElementById("theatreDetails").innerHTML =
+
+        "<strong>" + theatre.name + "</strong><br>" +
+
+        theatre.area + "<br>" +
+
+        "Estimated ticket price: ₹" + theatre.ticket +
+
+        "<br>Selected movie: " + selectedMovie;
+
+    renderSnacks();
+
+    updateSummary();
+
+}
+
+
+/* DISPLAY CURRENT MOVIES */
+
+function renderMovies() {
+
+    document.getElementById("movieCards").innerHTML =
+
+        movies.map(movie => `
+
+            <div class="card">
+
+                <div class="poster">
+                    ${movie.emoji}
+                </div>
+
+                <h3>${movie.name}</h3>
+
+                <p>${movie.genre}</p>
+
+                <p class="small">${movie.status}</p>
+
+                <button class="btn"
+                    onclick="selectMovie('${movie.name}')">
+                    SELECT MOVIE
+                </button>
+
+            </div>
+
+        `).join("");
+
+
+    document.getElementById("movieSelect").innerHTML =
+
+        movies.map(movie => `
+
+            <option value="${movie.name}">
+                ${movie.name}
+            </option>
+
+        `).join("");
+
+}
+
+
+/* SELECT MOVIE */
+
+function selectMovie(name) {
+
+    document.getElementById("movieSelect").value = name;
+
+    updateMovie();
+
+}
+
+
+/* UPDATE MOVIE */
+
+function updateMovie() {
+
+    selectedMovie =
+        document.getElementById("movieSelect").value;
+
+    const movie = movies.find(
+        m => m.name === selectedMovie
+    );
+
+    document.getElementById("movieInfo").innerText =
+        movie.genre + " | " + movie.status;
+
+    document.getElementById("reviewInfo").innerText =
+        movie.review;
+
+    selectedSeats = [];
+
+    renderSeats();
+
+    updateTheatre();
+
+    updateSummary();
+
+}
+
+
+/* UPCOMING MOVIES DISPLAY */
+
+function renderUpcomingMovies() {
+
+    const container =
+        document.getElementById("upcomingMovies");
+
+    container.innerHTML = upcomingMovies.map(movie => `
+
+        <div class="card">
+
+            <div class="poster">
+                ${movie.emoji}
+            </div>
+
+            <h3>${movie.name}</h3>
+
+            <p>${movie.description}</p>
+
+            <div class="price"
+                style="font-size:17px">
+                ${movie.date}
+            </div>
+
+            <p class="small">
+                Genre: ${movie.genre}
+            </p>
+
+        </div>
+
+    `).join("");
+
+}
+
+
+/* MOOD BASED MOVIE RECOMMENDATION */
+
+function suggestByMood() {
+
+    const interest =
+        document.getElementById("interest").value;
+
+    const mood =
+        document.getElementById("mood").value;
+
+    const duration =
+        document.getElementById("duration").value;
+
+
+    const recommendations = {
+
+        Action: {
+            movie: "Jailer 2",
+            reason:
+                "You enjoy action and adventure. This demo recommendation focuses on excitement."
+        },
+
+        Romance: {
+            movie: "Inji Vellam",
+            reason:
+                "A romantic drama may suit your interest."
+        },
+
+        Comedy: {
+            movie: "Jumanji: Open World",
+            reason:
+                "An adventure-comedy style movie may be a fun choice."
+        },
+
+        "Sci-Fi": {
+            movie: "Dune: Part Three",
+            reason:
+                "Explore an epic science-fiction universe."
+        },
+
+        Thriller: {
+            movie: "O.M Operation Mole",
+            reason:
+                "A mystery and suspense experience could suit you."
+        },
+
+        Drama: {
+            movie: "Inji Vellam",
+            reason:
+                "A drama may be a suitable choice."
+        },
+
+        Fantasy: {
+            movie: "Ramayana",
+            reason:
+                "Explore a fantasy and adventure experience."
+        }
+
+    };
+
+
+    const result = recommendations[interest];
+
+    const moodMessages = {
+
+        Happy:
+            "Your happy mood calls for an enjoyable movie!",
+
+        Sad:
+            "Here is a suggestion for a change of mood.",
+
+        Bored:
+            "Let's find something entertaining to watch!",
+
+        Excited:
+            "Your excitement deserves an exciting movie experience!",
+
+        Relaxed:
+            "Choose something comfortable to enjoy.",
+
+        Adventurous:
+            "Get ready for an adventurous movie experience!",
+
+        Curious:
+            "Let's explore something interesting!"
+
+    };
+
+
+    recommendedMovie = result.movie;
+
+
+    document.getElementById("suggestedMovie").innerText =
+        result.movie;
+
+    document.getElementById("suggestedReason").innerText =
+
+        moodMessages[mood] + " " +
+
+        result.reason + " Your preferred duration: " +
+
+        duration + ".";
+
+
+    document.getElementById("moodResult").style.display =
+        "block";
+
+}
+
+
+/* SELECT RECOMMENDED MOVIE */
+
+function bookRecommendedMovie() {
+
+    const currentMovie = movies.find(
+        movie => movie.name === recommendedMovie
+    );
+
+    if (!currentMovie) {
+
+        alert(
+            "This upcoming movie is not available for demo booking yet."
+        );
+
+        return;
+
+    }
+
+    document.getElementById("movieSelect").value =
+        recommendedMovie;
+
+    updateMovie();
+
+    document.getElementById("booking").scrollIntoView({
+        behavior: "smooth"
+    });
+
+}
+
+
+/* CREATE SEATS */
+
+function renderSeats() {
+
+    const grid = document.getElementById("seatGrid");
+
+    grid.innerHTML = "";
+
+    for (let i = 1; i <= 40; i++) {
+
+        const seat = document.createElement("button");
+
+        seat.className = "seat";
+
+        seat.innerText = i;
+
+        if ([4, 13, 27, 35].includes(i)) {
+
+            seat.classList.add("occupied");
+
+            seat.disabled = true;
+
+        }
+
+        if (selectedSeats.includes(i)) {
+            seat.classList.add("selected");
+        }
+
+        if (bestSeats.includes(i)) {
+            seat.classList.add("recommended");
+        }
+
+        seat.onclick = function() {
+
+            if (selectedSeats.includes(i)) {
+
+                selectedSeats =
+                    selectedSeats.filter(x => x !== i);
+
+            } else {
+
+                selectedSeats.push(i);
+
+            }
+
+            renderSeats();
+
+            updateSummary();
+
+        };
+
+        grid.appendChild(seat);
+
+    }
+
+}
+
+
+/* SEAT RECOMMENDATION */
+
+function recommendSeats() {
+
+    const availableRecommended =
+        bestSeats.filter(seat =>
+            ![4, 13, 27, 35].includes(seat)
+        );
+
+    selectedSeats = [...availableRecommended];
+
+    renderSeats();
+
+    updateSummary();
+
+    document.getElementById("seatResult").innerText =
+
+        "MatineeGo recommends seats " +
+        availableRecommended.join(", ") +
+        " in the central viewing area. " +
+        "This is a demonstration recommendation. " +
+        "Real recommendations need actual cinema screen and seating data.";
+
+}
+
+
+/* SNACK COMPARISON */
+
+function renderSnacks() {
+
+    const id =
+        document.getElementById("theatreSelect").value;
+
+    const theatre = theatres[id];
+
+    document.getElementById("snackList").innerHTML =
+
+        theatre.snacks.map(snack => `
+
+            <div class="card">
+
+                <h3>🍿 ${snack[0]}</h3>
+
+                <div class="price">
+                    ₹${snack[1]}
+                </div>
+
+                <p class="small">
+                    Illustrative menu price
+                </p>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+/* BOOKING SUMMARY */
+
+function updateSummary() {
+
+    const id =
+        document.getElementById("theatreSelect").value;
+
+    const theatre = theatres[id];
+
+    const total =
+        selectedSeats.length * theatre.ticket;
+
+    document.getElementById("bookingSummary").innerHTML =
+
+        "Theatre: " + theatre.name +
+
+        "<br>Movie: " + selectedMovie +
+
+        "<br>Seats: " +
+
+        (selectedSeats.length
+            ? selectedSeats.join(", ")
+            : "Not selected") +
+
+        "<br>Number of tickets: " + selectedSeats.length +
+
+        "<br>Estimated ticket total: ₹" + total;
+
+}
+
+
+/* DEMO BOOKING */
+
+function bookTicket() {
+
+    const id =
+        document.getElementById("theatreSelect").value;
+
+    const theatre = theatres[id];
+
+    if (selectedSeats.length === 0) {
+
+        document.getElementById("bookingResult").innerText =
+            "Please select at least one available seat.";
+
+        return;
+
+    }
+
+    const total =
+        selectedSeats.length * theatre.ticket;
+
+    document.getElementById("bookingResult").innerHTML =
+
+        "✅ DEMO BOOKING CONFIRMED!" +
+
+        "<br>Movie: " + selectedMovie +
+
+        "<br>Theatre: " + theatre.name +
+
+        "<br>Seats: " + selectedSeats.join(", ") +
+
+        "<br>Total amount: ₹" + total +
+
+        "<br><br>Thank you for choosing MatineeGo!" +
+
+        "<br><br><strong>This is only a demonstration. " +
+        "No real ticket has been booked.</strong>";
+
+}
+
+
+/* INITIALIZE WEBSITE */
+
+renderMovies();
+
+renderUpcomingMovies();
+
+renderSeats();
+
+updateMovie();
+
+updateTheatre();
+
+</script>
+
+</body>
+</html>
